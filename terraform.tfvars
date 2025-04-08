@@ -1,0 +1,12 @@
+resource_group_name = "devops2-resource-group-saurabh"
+location            = "West Europe"
+tags                = { "env" : "production" }
+vnet_name           = "devops2-vnet-name-saurabh"
+cidr_block          = ["10.0.0.0/16"]
+subnet_cidr_block   = ["10.0.2.0/24"]
+subnet_name         = "devops2-subnet-saurabh"
+public_ip_address   = "devops2-public-ip-saurabh"
+diskSize            = "Standard_DS1_v2"
+nic_name            = "devops2-public-ip-saurabh"
+nsg_name            = "devops2-nsg-saurabh"
+virtualMachineName = "devops2-virtual-name-saurabh"
