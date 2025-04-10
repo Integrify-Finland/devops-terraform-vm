@@ -1,40 +1,30 @@
-# Create (and display) an SSH key
-resource "tls_private_key" "example_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-output "tls_private_key" {
-  value     = tls_private_key.example_ssh.private_key_pem
-  sensitive = true
-}
-
-resource "azurerm_linux_virtual_machine" "my_vm" {
-  name                  = var.virtualMachineName
+resource "azurerm_linux_virtual_machine" "virtual_machine" {
+  name                  = var.virtual_machine_name
   location              = var.location
-  resource_group_name   = azurerm_resource_group.my_rg.name
-  network_interface_ids = [azurerm_network_interface.my_nic.id]
-  size                  = var.diskSize
+  resource_group_name   = azurerm_resource_group.resource_group.name
+  network_interface_ids = [azurerm_network_interface.network_interface_card.id]
+  size                  = var.disksize
 
   os_disk {
-    name                 = "myOsDisk"
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    name                 = var.os_disk_name
+    caching              = var.os_disk_caching
+    storage_account_type = var.os_disk_storage_account_type
   }
 
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+    publisher = var.source_image_reference_publisher
+    offer     = var.source_image_reference_offer
+    sku       = var.source_image_reference_sku
+    version   = var.source_image_reference_version
   }
 
-  computer_name                   = var.virtualMachineName
-  admin_username                  = "azureuser"
-  disable_password_authentication = true
+  computer_name                   = var.virtual_machine_name
+  admin_username                  = var.vm_admin_username
+  disable_password_authentication = var.vm_disable_password_authentication
 
   admin_ssh_key {
-    username   = "azureuser"
-    public_key = tls_private_key.example_ssh.public_key_openssh
+    username   = var.vm_admin_username
+    public_key = tls_private_key.ssh_key.public_key_openssh
   }
 
   boot_diagnostics {
